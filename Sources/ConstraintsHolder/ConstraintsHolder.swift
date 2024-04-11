@@ -2,12 +2,12 @@ import UIKit
 
 extension Constraints {
     /// Container assigned to view with all constraints that has been added to it
-    class ConstraintsHolder {
+    public class ConstraintsHolder {
         /// constraint values with a constraint-type as a key
         private var constraints: [ConstraintType: NSLayoutConstraint?] = [:]
         
         /// - - -
-        var left: NSLayoutConstraint? {
+        public var left: NSLayoutConstraint? {
             get {
                 constraints[.left] ?? nil
             }
@@ -19,7 +19,7 @@ extension Constraints {
             }
         }
         
-        var right: NSLayoutConstraint? {
+        public var right: NSLayoutConstraint? {
             get {
                 constraints[.right] ?? nil
             }
@@ -31,7 +31,7 @@ extension Constraints {
             }
         }
         
-        var top: NSLayoutConstraint? {
+        public var top: NSLayoutConstraint? {
             get {
                 constraints[.top] ?? nil
             }
@@ -43,7 +43,7 @@ extension Constraints {
             }
         }
         
-        var bottom: NSLayoutConstraint? {
+        public var bottom: NSLayoutConstraint? {
             get {
                 constraints[.bottom] ?? nil
             }
@@ -55,7 +55,7 @@ extension Constraints {
             }
         }
         
-        var leading: NSLayoutConstraint? {
+        public var leading: NSLayoutConstraint? {
             get {
                 constraints[.leading] ?? nil
             }
@@ -67,7 +67,7 @@ extension Constraints {
             }
         }
         
-        var trailing: NSLayoutConstraint? {
+        public var trailing: NSLayoutConstraint? {
             get {
                 constraints[.trailing] ?? nil
             }
@@ -79,7 +79,7 @@ extension Constraints {
             }
         }
         
-        var centerX: NSLayoutConstraint? {
+        public var centerX: NSLayoutConstraint? {
             get {
                 constraints[.centerX] ?? nil
             }
@@ -91,7 +91,7 @@ extension Constraints {
             }
         }
         
-        var centerY: NSLayoutConstraint? {
+        public var centerY: NSLayoutConstraint? {
             get {
                 constraints[.centerY] ?? nil
             }
@@ -103,7 +103,7 @@ extension Constraints {
             }
         }
         
-        var baseline: NSLayoutConstraint? {
+        public var baseline: NSLayoutConstraint? {
             get {
                 constraints[.baseline] ?? nil
             }
@@ -115,7 +115,7 @@ extension Constraints {
             }
         }
         
-        var width: NSLayoutConstraint? {
+        public var width: NSLayoutConstraint? {
             get {
                 constraints[.width] ?? nil
             }
@@ -127,7 +127,7 @@ extension Constraints {
             }
         }
         
-        var height: NSLayoutConstraint? {
+        public var height: NSLayoutConstraint? {
             get {
                 constraints[.height] ?? nil
             }
@@ -144,12 +144,12 @@ extension Constraints {
         ///
         /// - - -
         /// Returns all constraints contained in this holder
-        var all: [NSLayoutConstraint] {
+        public var all: [NSLayoutConstraint] {
             constraints.values.compactMap { $0 }
         }
         
         /// Returns active constraints contained in this holder
-        func activeConstraints() -> [Constraints.ConstraintType: NSLayoutConstraint] {
+        public func activeConstraints() -> [Constraints.ConstraintType: NSLayoutConstraint] {
             var activeConstraints: [Constraints.ConstraintType: NSLayoutConstraint] = [:]
             
             constraints.forEach { key, value in
@@ -166,7 +166,7 @@ extension Constraints {
         ///
         /// - - -
         /// Activate specified constraints stored in holder
-        @MainActor func activate(_ keyPaths: [KeyPath<Constraints.ConstraintsHolder, NSLayoutConstraint?>]) {
+        @MainActor public func activate(_ keyPaths: [KeyPath<Constraints.ConstraintsHolder, NSLayoutConstraint?>]) {
             let constraints = keyPaths.map { self[keyPath: $0] }
             
             let unwrappedConstraints = constraints.compactMap { $0 }
@@ -178,7 +178,7 @@ extension Constraints {
             NSLayoutConstraint.activate(unwrappedConstraints)
         }
         /// Deactivate specified constraints stored in holder
-        @MainActor func deactivate(_ keyPaths: [KeyPath<Constraints.ConstraintsHolder, NSLayoutConstraint?>]) {
+        @MainActor public func deactivate(_ keyPaths: [KeyPath<Constraints.ConstraintsHolder, NSLayoutConstraint?>]) {
             let constraints = keyPaths.map { self[keyPath: $0] }
             
             let unwrappedConstraints = constraints.compactMap { $0 }

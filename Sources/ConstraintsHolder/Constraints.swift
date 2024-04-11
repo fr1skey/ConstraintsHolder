@@ -1,7 +1,7 @@
 import UIKit
 
 /// Contains all constrains references inside `storage`
-final class Constraints {
+public class Constraints {
     private init() { }
     /// Constraints singleton instance
     static private let main = Constraints()
@@ -11,7 +11,7 @@ final class Constraints {
 
 extension Constraints {
     /// Layout anchor type
-    enum ConstraintType: String {
+    public enum ConstraintType: String {
         /// - - -
         case left, right, top, bottom, leading, trailing, centerX, centerY, width, height, baseline
         /// - - -
@@ -91,13 +91,13 @@ extension Constraints {
 // Convinience methods
 extension UIView {
     /// Exposes  constraints container that is bound to this view
-    func updateConstraints(exposeHolder: (Constraints.ConstraintsHolder) -> Void) {
+    public func updateConstraints(exposeHolder: (Constraints.ConstraintsHolder) -> Void) {
         Constraints.updateConstraints(self) {
             exposeHolder($0)
         }
     }
     
-    func removeFromeSuperViewAndClearConstraints() {
+    public func removeFromeSuperViewAndClearConstraints() {
         self.removeAllConstraints()
         self.removeFromSuperview()
     }
