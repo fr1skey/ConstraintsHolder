@@ -99,6 +99,7 @@ Besides convinience and reducing boilerplate there are other benefits to this ap
     }
 
 ```
+
 2) Error-prone constraint activation/de-activation:
 ``` Swift
     vw.updateConstraints { hodler in
@@ -119,7 +120,16 @@ Besides convinience and reducing boilerplate there are other benefits to this ap
         // fatalError: keyPath passed to deactivate() contained nil value constraint
     }
 ```
-3) Since framework uses keyPaths - you can't mistakenly activate/deactivate another constraint thad doesn't affect your view like in this example below:
+
+3) Error-prone constraint removal
+``` Swift
+vw.updateConstraints { holder in
+    holder.top = nil
+    // fatalError: top constraint must be deactivated first
+}
+```
+
+4) Since framework uses keyPaths - you can't mistakenly activate/deactivate another constraint thad doesn't affect your view like in this example below:
 ``` Swift
 private var vw1TopConstraint: NSLayoutConstraint?
 private var vw2TopConstraint: NSLayoutConstraint?
@@ -139,7 +149,7 @@ override func viewDidLoad() {
 }
 ```
 
-4) Consice and beautiful code. Update view-bound constraints from anywhere!
+5) Consice and beautiful code. Update view-bound constraints from anywhere!
 ``` Swift
 // just an example piece of code from one of my apps
 ...
@@ -163,10 +173,18 @@ assetsTotalValueLabel.updateConstraints { holder in
 }
 ```
 
-5) Return all view setted constraints or return only `active` ones:
+6) Return all view setted constraints or return only `active` ones:
 ``` Swift
 vw.updateConstraints { holder in
     let all = holder.all // [NSLayoutConstraint]
     let active = holder.active() // [Constraints.ConstraintType: NSLayoutConstraint]
 }
 ```
+
+7) Remove all constraints references from memory when removing view:
+``` Swift
+vw.removeFromeSuperViewAndClearConstraints()
+```
+
+### Caution
+**ConstraintsHolder** uses `accessibilityIdentifier` as a way to identify `UIView`s, so if you use it inside your app you better off not using this framework
