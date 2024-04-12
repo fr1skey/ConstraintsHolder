@@ -162,3 +162,11 @@ assetsTotalValueLabel.updateConstraints { holder in
     ])
 }
 ```
+
+5) Return all view setted constraints or return only `active` ones:
+``` Swift
+vw.updateConstraints { holder in
+    let all = holder.all // [NSLayoutConstraint]
+    let active = holder.active() // [Constraints.ConstraintType: NSLayoutConstraint]
+}
+```
