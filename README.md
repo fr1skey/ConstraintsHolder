@@ -62,10 +62,10 @@ override func viewDidLoad() {
     vw.translatesAutoResizingMaskIntoConstraints = false
     view.addSubview(vw)
 
-    vw.updateConstraints { hodler in
-        hodler.top = vw.topAnchor.constraint(equalTo: view.topAnchor, constant: 20)
+    vw.updateConstraints { holder in
+        holder.top = vw.topAnchor.constraint(equalTo: view.topAnchor, constant: 20)
 
-        hodler.activate([
+        holder.activate([
             \.top
         ])
     }
@@ -74,8 +74,8 @@ override func viewDidLoad() {
 ...
 
 func changeConstraint() {
-    vw.updateConstraints { hodler in
-        hodler.top?.constant = 50
+    vw.updateConstraints { holder in
+        holder.top?.constant = 50
         view.layoutIfNeeded()
     }
 }
@@ -89,11 +89,11 @@ Besides convinience and reducing boilerplate there are other benefits to this ap
 1) Error-prone constraints assignment:
 ``` Swift
 
-    vw.updateConstraints { hodler in
-        hodler.top = vw.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20) 
+    vw.updateConstraints { holder in
+        holder.top = vw.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20) 
         // fatalError: Can't assign value of ConstraintType.leading to variable of ConstraintType.top
 
-        hodler.activate([
+        holder.activate([
             \.top
         ])
     }
@@ -102,10 +102,10 @@ Besides convinience and reducing boilerplate there are other benefits to this ap
 
 2) Error-prone constraint activation/de-activation:
 ``` Swift
-    vw.updateConstraints { hodler in
-        hodler.top = vw.topAnchor.constraint(equalTo: view.topAnchor, constant: 20) 
+    vw.updateConstraints { holder in
+        holder.top = vw.topAnchor.constraint(equalTo: view.topAnchor, constant: 20) 
 
-        hodler.activate([
+        holder.activate([
             \.bottom
         ])
         // fatalError: keyPath passed to activate() contained nil value constraint
@@ -113,8 +113,8 @@ Besides convinience and reducing boilerplate there are other benefits to this ap
 ```
 
 ``` Swift
-    vw.updateConstraints { hodler in
-        hodler.deactivate([
+    vw.updateConstraints { holder in
+        holder.deactivate([
             \.bottom
         ])
         // fatalError: keyPath passed to deactivate() contained nil value constraint
