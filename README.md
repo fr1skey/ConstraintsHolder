@@ -181,10 +181,7 @@ vw.updateConstraints { holder in
 }
 ```
 
-7) Remove all constraints references from memory when removing view:
-``` Swift
-vw.removeFromeSuperViewAndClearConstraints()
-```
+7) Constraints are *automatically cleared up* when view is removed from view hierarchy - so you don't have to do it yourself!
 
 ### Caution
 **ConstraintsHolder** uses `accessibilityIdentifier` as a way to identify `UIView`s, so if you use it inside your app you better off not using this framework
