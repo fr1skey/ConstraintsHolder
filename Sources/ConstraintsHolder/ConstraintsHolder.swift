@@ -165,7 +165,7 @@ extension Constraints {
         ///
         ///
         /// - - -
-        /// Activate specified constraints stored in holder
+        /// Activates specified constraints stored in holder
         @MainActor public func activate(_ keyPaths: [KeyPath<Constraints.ConstraintsHolder, NSLayoutConstraint?>]) {
             let constraints = keyPaths.map { self[keyPath: $0] }
             
@@ -177,7 +177,7 @@ extension Constraints {
             
             NSLayoutConstraint.activate(unwrappedConstraints)
         }
-        /// Deactivate specified constraints stored in holder
+        /// Deactivates specified constraints stored in holder
         @MainActor public func deactivate(_ keyPaths: [KeyPath<Constraints.ConstraintsHolder, NSLayoutConstraint?>]) {
             let constraints = keyPaths.map { self[keyPath: $0] }
             
@@ -188,6 +188,18 @@ extension Constraints {
             }
             
             NSLayoutConstraint.deactivate(unwrappedConstraints)
+        }
+        /// Activates all setted constraints
+        @MainActor public func activateAll() {
+            let constraints = self.constraints.values.compactMap { $0 }
+            
+            NSLayoutConstraint.activate(constraints)
+        }
+        /// Deactivates all setted constraints
+        @MainActor public func deactivateAll() {
+            let constraints = self.constraints.values.compactMap { $0 }
+            
+            NSLayoutConstraint.deactivate(constraints)
         }
         /// - - -
         ///
