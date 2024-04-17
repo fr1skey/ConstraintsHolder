@@ -7,6 +7,7 @@ public class Constraints {
     static private let main = Constraints()
     /// Constraints holders stored by <UIVIewID>
     private var storage: [UIViewID: ConstraintsHolder] = [:]
+    private var hashesOfSwizzledTypes: Set<Int> = []
 }
 
 extension Constraints {
@@ -65,6 +66,17 @@ extension Constraints {
         } else {
             let constraintHolder = ConstraintsHolder()
             main.storage[viewID] = constraintHolder
+            // Swizzle methods for automatic constraints clean-up on view removing.
+            // ...
+            // since swizzling works on whole type and not just single instance - we need to prevent re-swizzling by knowing which types already have been swizzled
+            let viewType = type(of: view)
+            let viewTypeHash = ObjectIdentifier(type(of: view)).hashValue
+            if main.hashesOfSwizzledTypes.contains(viewTypeHash) == false {
+                swizzleDidMoveToWindow(viewType)
+                main.hashesOfSwizzledTypes.insert(viewTypeHash)
+            }
+            // ...
+            
             exposeHolder(constraintHolder)
         }
     }
@@ -97,6 +109,7 @@ extension UIView {
         }
     }
     
+    @available(*, deprecated, message: "Constraints now automatically cleared when view is removed from view hierarchy (window == nil)")
     public func removeFromeSuperViewAndClearConstraints() {
         self.removeAllConstraints()
         self.removeFromSuperview()
@@ -120,5 +133,40 @@ extension UIView {
         }
         
         return viewID
+    }
+}
+
+// MARK: - Swizzling
+func swizzleDidMoveToWindow<T>(_ type: T.Type) where T: UIView {
+    let originalSelector = #selector(type.didMoveToWindow)
+    let swizzledSelector = #selector(type.clearConstraintsRightAfterDidMoveToWindow)
+
+    let originalMethod = class_getInstanceMethod(type, originalSelector)
+    let swizzledMethod = class_getInstanceMethod(type, swizzledSelector)
+    
+    guard let originalMethod, let swizzledMethod else { return }
+    
+    let didAddMethod = class_addMethod(type, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
+    
+    if didAddMethod {
+        class_replaceMethod(type, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod))
+    } else {
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }
+}
+
+extension UIView {
+    /// Swizzling & clearing constraints after UIView is removed from view hierarchy
+    @objc func clearConstraintsRightAfterDidMoveToWindow() {
+        // call to default `didMoveToWindow()`
+        self.clearConstraintsRightAfterDidMoveToWindow()
+        
+        // clear constraints
+        if window == nil {
+            self.updateConstraints { holder in
+                holder.deactivateAll()
+            }
+            Constraints.removeAllConstraints(self)
+        }
     }
 }
