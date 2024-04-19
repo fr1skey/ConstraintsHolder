@@ -185,3 +185,11 @@ vw.updateConstraints { holder in
 
 ### Caution
 **ConstraintsHolder** uses `accessibilityIdentifier` as a way to identify `UIView`s, so if the code inside your app unconditionally overrides this property you better off not using this framework.
+However it is very easy to be compatible with framework by making sure you check for existing `accessibilityIdentifier` before overriding it like following:
+``` Swift
+if let accessibilityIdentifier {
+    // use existing one
+} else {
+    // safe to override
+}
+```
