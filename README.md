@@ -184,4 +184,4 @@ vw.updateConstraints { holder in
 7) Constraints are *automatically cleared up* when view is removed from view hierarchy - so you don't have to do it yourself!
 
 ### Caution
-**ConstraintsHolder** uses `accessibilityIdentifier` as a way to identify `UIView`s, so if you use it inside your app you better off not using this framework
+**ConstraintsHolder** uses `accessibilityIdentifier` as a way to identify `UIView`s, so if the code inside your app unconditionally overrides this property you better off not using this framework.
