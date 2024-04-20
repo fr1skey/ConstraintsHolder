@@ -1,12 +1,13 @@
 import UIKit
+import UIViewID
 
 /// Contains all constrains references inside `storage`
 public class Constraints {
     private init() { }
     /// Constraints singleton instance
     static private let main = Constraints()
-    /// Constraints holders stored by <UIVIewID>
-    private var storage: [UIViewID: ConstraintsHolder] = [:]
+    /// Constraints holders stored by `accessibilityIdentifier`
+    private var storage: [String: ConstraintsHolder] = [:]
     private var hashesOfSwizzledTypes: Set<Int> = []
 }
 
@@ -59,7 +60,7 @@ extension Constraints {
 extension Constraints {
     /// Exposes  constraints container that is bound to specified view
     static func updateConstraints(_ view: UIView, exposeHolder: (ConstraintsHolder) -> Void) {
-        let viewID = view.getViewID()
+        let viewID = view.getID()
         
         if let constraintHolder = main.storage[viewID] {
             exposeHolder(constraintHolder)
@@ -83,7 +84,7 @@ extension Constraints {
     
     /// Clears up constraints container that is bound to specified view
     static func removeAllConstraints(_ view: UIView) {
-        let viewID = view.getViewID()
+        let viewID = view.getID()
         
         if let holder = main.storage[viewID] {
             holder.all.forEach {
@@ -118,21 +119,6 @@ extension UIView {
     /// Clears up constraints container that is bound to this view
     func removeAllConstraints() {
         Constraints.removeAllConstraints(self)
-    }
-    
-    /// Retrievs view's id
-    func getViewID() -> UIViewID {
-        let viewID: UIViewID
-        
-        if let id = self.accessibilityIdentifier {
-            viewID = id
-        } else {
-            let id = UUID().uuidString
-            self.accessibilityIdentifier = id
-            viewID = id
-        }
-        
-        return viewID
     }
 }
 
