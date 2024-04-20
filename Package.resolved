@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "uiviewid",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leofriskey/UIViewID.git",
+      "state" : {
+        "revision" : "36e0e4e3edb730e98fc79d69275e5e798e5997b4",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 2
+}
