@@ -58,12 +58,13 @@ extension Constraints {
 
 
 extension Constraints {
-    /// Exposes  constraints container that is bound to specified view
-    static func updateConstraints(_ view: UIView, exposeHolder: (ConstraintsHolder) -> Void) {
+    /// Exposes constraints container that is bound to specified view
+    static func updateConstraints(_ view: UIView, exposeHolder: (UIView, ConstraintsHolder) -> Void) {
         let viewID = view.getID()
+        view.translatesAutoresizingMaskIntoConstraints = false
         
         if let constraintHolder = main.storage[viewID] {
-            exposeHolder(constraintHolder)
+            exposeHolder(view, constraintHolder)
         } else {
             let constraintHolder = ConstraintsHolder()
             main.storage[viewID] = constraintHolder
@@ -78,7 +79,7 @@ extension Constraints {
             }
             // ...
             
-            exposeHolder(constraintHolder)
+            exposeHolder(view, constraintHolder)
         }
     }
     
@@ -104,9 +105,9 @@ extension Constraints {
 // Convinience methods
 extension UIView {
     /// Exposes  constraints container that is bound to this view
-    public func updateConstraints(exposeHolder: (Constraints.ConstraintsHolder) -> Void) {
-        Constraints.updateConstraints(self) {
-            exposeHolder($0)
+    public func updateConstraints(_ exposeHolder: (UIView, Constraints.ConstraintsHolder) -> Void) {
+        Constraints.updateConstraints(self) { view, holder in
+            exposeHolder(view, holder)
         }
     }
     
@@ -149,7 +150,7 @@ extension UIView {
         
         // clear constraints
         if window == nil {
-            self.updateConstraints { holder in
+            self.updateConstraints { _, holder in
                 holder.deactivateAll()
             }
             Constraints.removeAllConstraints(self)
